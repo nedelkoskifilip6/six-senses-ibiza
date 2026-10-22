@@ -7,7 +7,7 @@ const imageBase = new URL('images/', document.querySelector<HTMLLinkElement>('li
 const official = 'https://www.sixsenses.com/en/hotels-resorts/europe/spain/ibiza/';
 const header = document.querySelector<HTMLElement>('.site-header');
 let ticking = false;
-const updateHeader = () => { header?.classList.toggle('is-scrolled', !document.querySelector('.hero-story') || window.scrollY > window.innerHeight * .12); ticking = false; };
+const updateHeader = () => { header?.classList.toggle('is-scrolled', !document.querySelector('.hero-story') || window.scrollY > window.innerHeight * .20); ticking = false; };
 window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(updateHeader); ticking = true; } }, {passive:true});
 updateHeader();
 
@@ -38,7 +38,6 @@ window.matchMedia('(min-width: 961px)').addEventListener('change',event => {if (
 // The photograph becomes a magazine spread. One scrubbed timeline owns its geometry,
 // so forward and reverse scrolling travel through precisely the same composition.
 const media = gsap.matchMedia();
-let heroEntrancePlayed=false;
 ScrollTrigger.config({ignoreMobileResize:true});
 if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701px)', mobile:'(max-width: 700px)', reduce:'(prefers-reduced-motion: reduce)' }, context => {
   const {desktop,reduce} = context.conditions!;
@@ -48,41 +47,25 @@ if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701p
     return () => stage?.classList.remove('is-static');
   }
   const intro=gsap.timeline({defaults:{ease:'power3.out'}});
-  const navigation=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-  const hasDeepLink=Boolean(location.hash && !['#','#main'].includes(location.hash));
-  if (!heroEntrancePlayed && window.scrollY < 2 && !hasDeepLink && navigation?.type !== 'back_forward') {
-    heroEntrancePlayed=true;
-    intro.from('.hero-photo',{opacity:.55,duration:1.3,clearProps:'opacity'},0)
-      .from('.site-header',{opacity:0,y:-8,duration:.7,clearProps:'transform,opacity'},.1)
-      .from('.hero-kicker',{opacity:0,y:12,duration:.7,clearProps:'transform,opacity'},.2)
-      .fromTo('.hero-line',{autoAlpha:0,yPercent:100},{autoAlpha:1,yPercent:0,duration:1,stagger:.12,clearProps:'transform,opacity,visibility'},.3)
-      .from('.hero-bottom p',{opacity:0,y:14,duration:.8,clearProps:'transform,opacity'},.76)
-      .from('.hero-explore',{opacity:0,y:14,duration:.75,clearProps:'transform,opacity'},.96);
+  if (window.scrollY < 50) {
+    intro.from('.hero-photo-frame',{opacity:.3,duration:1.35},0)
+      .from('.site-header',{opacity:0,y:-10,duration:.8},.1)
+      .from('.hero-kicker',{opacity:0,y:14,duration:.8},.15)
+      .from('.hero-line',{opacity:0,y:45,duration:1.1,stagger:.11},.25)
+      .from('.hero-bottom',{opacity:0,y:12,duration:1},.6);
   }
-  const finishIntro=()=>{ if (intro.duration()>0 && intro.progress()<1) intro.progress(1).kill(); };
-  const interruptEntrance=()=>{ if (window.scrollY>4) finishIntro(); };
-  window.addEventListener('scroll',interruptEntrance,{passive:true});
   const cinematic=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{
     trigger:'.hero-story',start:'top top',end:() => `+=${window.innerHeight * (desktop?1.85:1.2)}`,
-    pin:'.hero-stage',pinSpacing:true,scrub:desktop?.45:.2,anticipatePin:1,invalidateOnRefresh:true,
-    onLeaveBack:self=>{self.getTween()?.progress(1);self.animation?.progress(0);},
+    pin:'.hero-stage',pinSpacing:true,scrub:desktop?.65:.25,anticipatePin:1,invalidateOnRefresh:true,
   }});
-  cinematic.fromTo('.hero-content',{autoAlpha:1},{autoAlpha:0,duration:.28},0)
-    .fromTo('.hero-foot,.hero-photo-note',{autoAlpha:1},{autoAlpha:0,duration:.22},0)
-    .fromTo('.hero-photo',{scale:1},{scale:1.045,duration:.58},0)
-    .fromTo('.hero-photo-frame',{left:'0%',top:'0%',width:'100%',height:'100%'},{left:'6%',top:'10%',width:'88%',height:'80%',duration:.38,ease:'power1.inOut'},.12)
-    .to('.hero-shade',{opacity:0,duration:.38},.12)
-    .to('.hero-photo-frame',{left:desktop?'47%':'6%',top:desktop?'20%':'44%',width:desktop?'47%':'88%',height:desktop?'68%':'49%',duration:.55,ease:'power2.inOut'},.5)
-    .fromTo('.transition-copy',{autoAlpha:0,y:24},{autoAlpha:1,y:0,duration:.4,ease:'power2.out'},.68)
-    .fromTo('.frame-secondary',{autoAlpha:0,clipPath:'inset(100% 0% 0% 0%)',y:20},{autoAlpha:1,clipPath:'inset(0% 0% 0% 0%)',y:0,duration:.45,ease:'power2.inOut'},.72)
-    .to({}, {duration:.15});
-  const synchronizeRestoredScene=()=>requestAnimationFrame(()=>{
-    if(window.scrollY>4) finishIntro();
-    ScrollTrigger.refresh();
-    cinematic.scrollTrigger?.getTween()?.progress(1);
-    updateHeader();
-  });
-  window.addEventListener('pageshow',synchronizeRestoredScene);
+  cinematic.to('.hero-content',{autoAlpha:0,y:desktop?-60:-25,duration:.25},0)
+    .to('.hero-foot,.hero-photo-note',{autoAlpha:0,duration:.18},0)
+    .to('.hero-photo-frame',{left:'6%',top:'10%',width:'88%',height:'80%',duration:.4,ease:'power1.inOut'},.08)
+    .to('.hero-shade',{opacity:0,duration:.4},.08)
+    .to('.hero-photo-frame',{left:desktop?'47%':'6%',top:desktop?'20%':'44%',width:desktop?'47%':'88%',height:desktop?'68%':'49%',duration:.55,ease:'power2.inOut'},.42)
+    .fromTo('.transition-copy',{autoAlpha:0,y:24},{autoAlpha:1,y:0,duration:.4,ease:'power2.out'},.58)
+    .fromTo('.frame-secondary',{autoAlpha:0,clipPath:'inset(100% 0% 0% 0%)',y:20},{autoAlpha:1,clipPath:'inset(0% 0% 0% 0%)',y:0,duration:.5,ease:'power2.inOut'},.6)
+    .to({}, {duration:.14});
   gsap.utils.toArray<HTMLElement>('.reveal').forEach(element => {
     gsap.from(element,{y:desktop?35:20,opacity:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:element,start:'top 92%',once:true}});
   });
@@ -95,7 +78,7 @@ if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701p
     gsap.fromTo('.wellness-breathe svg',{rotation:-10,scale:.92},{rotation:12,scale:1.04,ease:'none',scrollTrigger:{trigger:'.wellness',start:'top bottom',end:'bottom top',scrub:1.5}});
     gsap.fromTo('.nature-image img',{objectPosition:'40% 35%'},{objectPosition:'40% 60%',ease:'none',scrollTrigger:{trigger:'.nature-image',start:'top bottom',end:'bottom top',scrub:1.2}});
   }
-  return () => { intro.kill(); window.removeEventListener('scroll',interruptEntrance); window.removeEventListener('pageshow',synchronizeRestoredScene); };
+  return () => intro.kill();
 });
 document.fonts.ready.then(() => ScrollTrigger.refresh());
 window.addEventListener('load', () => ScrollTrigger.refresh(),{once:true});
