@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { visualJournal } from '../data/photography';
 gsap.registerPlugin(ScrollTrigger);
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -133,14 +134,7 @@ experienceTabs.forEach((tab,i) => {
 });
 
 // A photographic exhibition shared with the React accommodation viewer.
-const galleryImages = [
-  {image:'hero',caption:'The water, the light · Ibiza destination photography'},
-  {image:'suite',caption:'Softness in the details · Tunisia, illustrative interior'},
-  {image:'coast',caption:'Along the quiet coast · Ibiza, illustrative resort'},
-  {image:'spa',caption:'A moment, entirely yours · Illustrative wellness interior'},
-  {image:'dining',caption:'An invitation to linger · Spain, illustrative dining'},
-  {image:'sunset',caption:'Nothing more to do · Es Vedrà, Ibiza'},
-];
+const galleryImages = visualJournal.map(({image, caption, location}) => ({ image, caption: `${caption} · ${location}` }));
 document.querySelectorAll<HTMLButtonElement>('[data-gallery-index]').forEach(button=>{
   button.addEventListener('click',()=>window.dispatchEvent(new CustomEvent('open-photo',{detail:{images:galleryImages,index:Number(button.dataset.galleryIndex)}})));
 });
