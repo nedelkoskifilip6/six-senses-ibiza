@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
-import serifFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-normal.woff2?url';
-import italicFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-italic.woff2?url';
+import serifFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2?url';
 import sansFont from '@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2?url';
 interface Props { title?: string; description?: string; }
 const {title='Six Senses Ibiza — The Beauty of Being | Independent Concept',description='An independent design study inspired by the quiet northern coast of Ibiza. Discover suites, wellness, Mediterranean dining and a slower rhythm of life. Not affiliated with Six Senses.'}=Astro.props;
@@ -18,7 +17,6 @@ const base = import.meta.env.BASE_URL;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="preload" href={serifFont} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={italicFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={sansFont} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <meta property="og:type" content="website" />
