@@ -1,0 +1,24 @@
+---
+const base = `${import.meta.env.BASE_URL}images/`;
+---
+<picture class="hero-picture">
+  <source
+    media="(max-width: 700px)"
+    srcset={`${base}hero-mobile-480.webp 480w, ${base}hero-mobile-720.webp 720w`}
+    sizes="100vw"
+    width="720"
+    height="1280"
+  />
+  <img
+    class="hero-photo"
+    src={`${base}hero-desktop-1280.webp`}
+    srcset={`${base}hero-desktop-800.webp 800w, ${base}hero-desktop-1280.webp 1280w`}
+    sizes="100vw"
+    width="1280"
+    height="800"
+    alt="Warmly lit limestone residence, private pool and terraces beneath a Mediterranean sunset"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  />
+</picture>

@@ -129,11 +129,11 @@ export default function PhotoLightbox({ imageBase }: PhotoLightboxProps) {
           </figure>
           <div className="lightbox-controls">
             <button className="lightbox-prev" type="button" onClick={() => move(-1)} disabled={photos.length < 2} aria-label="Previous photo">
-              <svg aria-hidden="true" viewBox="0 0 32 16" fill="none" width="32" height="16"><path d="M30 8H2m0 0 7-7M2 8l7 7" stroke="currentColor" strokeWidth="1.2" /></svg><span>Previous</span>
+              <span>Previous</span>
             </button>
             <span className="lightbox-counter" aria-label={`Photo ${active + 1} of ${photos.length}`}><span>{String(active + 1).padStart(2, '0')}</span> / {String(photos.length).padStart(2, '0')}</span>
             <button className="lightbox-next" type="button" onClick={() => move(1)} disabled={photos.length < 2} aria-label="Next photo">
-              <span>Next</span><svg aria-hidden="true" viewBox="0 0 32 16" fill="none" width="32" height="16"><path d="M2 8h28m0 0-7-7m7 7-7 7" stroke="currentColor" strokeWidth="1.2" /></svg>
+              <span>Next</span>
             </button>
           </div>
         </>
