@@ -15,7 +15,8 @@ export const rooms = [
       "Yoga mat",
       "Pillow menu"
     ],
-    "image": "suite-view",
+    "image": "supplied-residence-01-clean",
+    "imageAlt": "Sunlit terrace with curved steps, woven pergola and a view across the bay",
     "source": "https://www.sixsenses.com/en/hotels-resorts/europe/spain/ibiza/accommodation/sea-view-junior-suite/"
   },
   {
@@ -34,7 +35,8 @@ export const rooms = [
       "Tea & coffee service",
       "Yoga mat"
     ],
-    "image": "suite",
+    "image": "supplied-residence-02-clean",
+    "imageAlt": "Natural-toned living room opening onto a terrace and the bay",
     "source": "https://www.sixsenses.com/en/hotels-resorts/europe/spain/ibiza/accommodation/sea-view-cave-suite/"
   },
   {
@@ -53,7 +55,8 @@ export const rooms = [
       "Wooden floors",
       "Wi-Fi"
     ],
-    "image": "suite-wide",
+    "image": "supplied-residence-03-clean",
+    "imageAlt": "Sea-facing bedroom with woven details and corner windows",
     "source": "https://www.sixsenses.com/en/hotels-resorts/europe/spain/ibiza/accommodation/sea-view-one-bedroom-suite/"
   },
   {
@@ -72,7 +75,8 @@ export const rooms = [
       "Walk-in shower & bathtub",
       "Tea & coffee service"
     ],
-    "image": "terrace",
+    "image": "supplied-residence-04-clean",
+    "imageAlt": "Evening lounge with timber flooring and an open terrace",
     "source": "https://www.sixsenses.com/en/hotels-resorts/europe/spain/ibiza/accommodation/xarraca-two-bedroom-suite/"
   },
   {
@@ -89,7 +93,8 @@ export const rooms = [
       "Indoor gathering spaces",
       "Outdoor living"
     ],
-    "image": "pool-villa",
+    "image": "supplied-residence-05-clean",
+    "imageAlt": "Infinity pool and sun loungers overlooking the sea at dusk",
     "source": "https://www.sixsenses.com/en/hotels-resorts/europe/spain/ibiza/accommodation/"
   }
 ];
