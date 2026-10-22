@@ -24,6 +24,7 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
   const [active, setActive] = useState(0);
   const [previous, setPrevious] = useState(0);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [hasNavigated, setHasNavigated] = useState(false);
   const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>('vertical');
   const instanceId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -88,6 +89,7 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
   const selectRoom = (index: number, focusTab = false) => {
     const next = ((index % rooms.length) + rooms.length) % rooms.length;
     if (next !== activeRef.current) {
+      setHasNavigated(true);
       directionRef.current = index >= activeRef.current ? 1 : -1;
       setPrevious(readyImageRef.current);
       activeRef.current = next;
@@ -166,7 +168,7 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
         <div ref={panelRef} className="stay-suite" role="tabpanel" id={`${instanceId}-panel`} aria-labelledby={`${instanceId}-tab-${active}`} tabIndex={0}>
           <div className="stay-photo-stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onTouchCancel={() => { touchStart.current = null; }}>
             <img className="stay-photo-underlay" src={`${imageBase}${previousRoom.image}-1600.webp`} alt="" aria-hidden="true" width="1600" height="1100" loading="lazy" decoding="async" />
-            <img ref={photoRef} key={room.id} className="stay-photo-current" src={`${imageBase}${room.image}-1600.webp`} srcSet={photoSrcSet(room.image, imageBase)} sizes="(max-width: 850px) 90vw, 65vw" alt={`${room.imageAlt}; supplied photography enhanced with AI`} width={photoDimensions(room.image)[0]} height={photoDimensions(room.image)[1]} loading="lazy" decoding="async" onLoad={() => { readyImageRef.current = active; }} />
+            <img ref={photoRef} key={room.id} className="stay-photo-current" src={`${imageBase}${room.image}-1600.webp`} srcSet={photoSrcSet(room.image, imageBase)} sizes="(max-width: 850px) 90vw, 65vw" alt={`${room.imageAlt}; supplied photography enhanced with AI`} width={photoDimensions(room.image)[0]} height={photoDimensions(room.image)[1]} loading={hasNavigated ? 'eager' : 'lazy'} decoding="async" onLoad={() => { readyImageRef.current = active; }} />
             <span className="stay-photo-index" aria-hidden="true"><span>N°</span>{number(active)}</span>
             <button type="button" className="stay-open-collection" onClick={openCollection} aria-label="Open the accommodation photo collection full screen"><span>VIEW THE COLLECTION</span></button>
           </div>
