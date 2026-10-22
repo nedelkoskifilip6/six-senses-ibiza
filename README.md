@@ -48,7 +48,7 @@ The committed `.github/workflows/deploy.yml` installs dependencies with Node.js 
 
 Use the independent repository and workflow. Create the repository only if absent; never overwrite another project. After publishing, verify the live homepage, `/six-senses-ibiza/credits/`, an image and a JavaScript asset, then check navigation, galleries, the reservation demonstration and scroll behavior on desktop and mobile.
 
-**Current redesign release status:** prepared locally; public deployment verification is pending. A prepared workflow or successful local build does not confirm that this redesign is available at the target URL.
+**Release verification:** A successful local build alone does not confirm publication. Check the GitHub Actions deployment and the live target URL before treating a release as published.
 
 ## Reservation demonstration
 
