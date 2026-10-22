@@ -275,7 +275,7 @@ figcaption { font-size:8px; line-height:1.5; letter-spacing:.1em; padding-top:15
 }
 @media(max-height:600px) and (min-width:701px) {
   .site-header { min-height:74px; padding-top:17px; padding-bottom:17px; }
-  .transition-copy p { font-size:min(6.3vw,10.5svh); margin:16px 0 14px; }
+  .transition-copy p { font-size:min(6.3vw,9.5svh); margin:8px 0 6px; }
   .hero-content { padding-top:18svh; padding-bottom:15svh; }
   .hero-kicker { margin-bottom:15px; font-size:8px; }
   .hero-content h1 { font-size:min(8.2vw,17svh); line-height:1.03; }
