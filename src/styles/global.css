@@ -71,7 +71,7 @@ figcaption { font-size:8px; line-height:1.5; letter-spacing:.1em; padding-top:15
 .hero-content h1 { font:400 clamp(100px,12.8vw,230px)/.79 var(--serif); letter-spacing:-.045em; }
 .hero-line { display:block; }
 .hero-line-second { margin-top:.1em; padding-left:22%; }
-.hero-line em { letter-spacing:-.07em; }
+.hero-line em { font-style:normal; letter-spacing:-.07em; }
 .hero-bottom { display:flex; justify-content:space-between; align-items:flex-end; gap:30px; margin-top:6svh; }
 .hero-bottom p { max-width:380px; font-size:12px; line-height:1.8; }
 .hero-explore { display:flex; align-items:center; gap:30px; font-size:11px; }
