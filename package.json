@@ -9,6 +9,7 @@
     "preview": "astro preview --host 0.0.0.0",
     "check": "astro check",
     "optimize-images": "node scripts/optimize-images.mjs",
+    "prepare-supplied-photos": "node scripts/prepare-supplied-photos.mjs",
     "verify": "node scripts/verify-build.mjs"
   },
   "dependencies": {
