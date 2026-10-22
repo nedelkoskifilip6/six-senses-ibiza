@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type TouchEvent } from 'react';
+import { photoDimensions, photoSrcSet } from '../data/photography';
 
 interface Photo {
   image: string;
@@ -117,11 +118,11 @@ export default function PhotoLightbox({ imageBase }: PhotoLightboxProps) {
               key={photo.image}
               className="lightbox-image"
               src={`${imageBase}${photo.image}-1600.webp`}
-              srcSet={`${imageBase}${photo.image}-800.webp 800w, ${imageBase}${photo.image}-1600.webp 1600w`}
+              srcSet={photoSrcSet(photo.image, imageBase)}
               sizes="100vw"
               alt={photo.caption}
-              width="1600"
-              height="1100"
+              width={photoDimensions(photo.image)[0]}
+              height={photoDimensions(photo.image)[1]}
               decoding="async"
               draggable={false}
             />

@@ -1,5 +1,6 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from 'react';
 import gsap from 'gsap';
+import { photoDimensions, photoSrcSet } from '../data/photography';
 import '../styles/stay-gallery.css';
 
 export interface Accommodation {
@@ -11,6 +12,7 @@ export interface Accommodation {
   guests: string;
   features: string[];
   image: string;
+  imageAlt: string;
   source: string;
 }
 
@@ -102,7 +104,7 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
     const images = rooms.filter((item, index, all) => all.findIndex((candidate) => candidate.image === item.image) === index);
     window.dispatchEvent(new CustomEvent('open-photo', {
       detail: {
-        images: images.map((item) => ({ image: item.image, caption: `${item.name} · Illustrative design reference, not the actual accommodation` })),
+        images: images.map((item) => ({ image: item.image, caption: `${item.imageAlt} · Supplied photography, AI-enhanced. Exact room category not verified.` })),
         index: Math.max(0, images.findIndex((item) => item.image === room.image)),
       },
     }));
@@ -164,11 +166,11 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
         <div ref={panelRef} className="stay-suite" role="tabpanel" id={`${instanceId}-panel`} aria-labelledby={`${instanceId}-tab-${active}`} tabIndex={0}>
           <div className="stay-photo-stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onTouchCancel={() => { touchStart.current = null; }}>
             <img className="stay-photo-underlay" src={`${imageBase}${previousRoom.image}-1600.webp`} alt="" aria-hidden="true" width="1600" height="1100" loading="lazy" decoding="async" />
-            <img ref={photoRef} key={room.id} className="stay-photo-current" src={`${imageBase}${room.image}-1600.webp`} srcSet={`${imageBase}${room.image}-800.webp 800w, ${imageBase}${room.image}-1600.webp 1600w, ${imageBase}${room.image}-2400.webp 2400w`} sizes="(max-width: 850px) 90vw, 65vw" alt={`Illustrative architectural reference for ${room.name}; not the actual Six Senses accommodation`} width="1600" height="1100" loading="lazy" decoding="async" onLoad={() => { readyImageRef.current = active; }} />
+            <img ref={photoRef} key={room.id} className="stay-photo-current" src={`${imageBase}${room.image}-1600.webp`} srcSet={photoSrcSet(room.image, imageBase)} sizes="(max-width: 850px) 90vw, 65vw" alt={`${room.imageAlt}; supplied photography enhanced with AI`} width={photoDimensions(room.image)[0]} height={photoDimensions(room.image)[1]} loading="lazy" decoding="async" onLoad={() => { readyImageRef.current = active; }} />
             <span className="stay-photo-index" aria-hidden="true"><span>N°</span>{number(active)}</span>
-            <button type="button" className="stay-open-collection" onClick={openCollection} aria-label="Open the illustrative accommodation photo collection full screen"><span>VIEW THE COLLECTION</span></button>
+            <button type="button" className="stay-open-collection" onClick={openCollection} aria-label="Open the accommodation photo collection full screen"><span>VIEW THE COLLECTION</span></button>
           </div>
-          <div className="stay-photo-ledger"><span>SPACES FOR SLOWER DAYS</span><span>ILLUSTRATIVE PHOTOGRAPHY</span><div className="stay-step-controls"><button type="button" aria-label="Previous accommodation" onClick={() => selectRoom(activeRef.current - 1)}><span>Previous</span></button><span aria-hidden="true">{number(active)} <i>/</i> {String(rooms.length).padStart(2, '0')}</span><button type="button" aria-label="Next accommodation" onClick={() => selectRoom(activeRef.current + 1)}><span>Next</span></button></div></div>
+          <div className="stay-photo-ledger"><span>SPACES FOR SLOWER DAYS</span><span>AI-ENHANCED PHOTOGRAPHY</span><div className="stay-step-controls"><button type="button" aria-label="Previous accommodation" onClick={() => selectRoom(activeRef.current - 1)}><span>Previous</span></button><span aria-hidden="true">{number(active)} <i>/</i> {String(rooms.length).padStart(2, '0')}</span><button type="button" aria-label="Next accommodation" onClick={() => selectRoom(activeRef.current + 1)}><span>Next</span></button></div></div>
           <div ref={storyRef} className="stay-editorial">
             <div className="stay-title-block" data-stay-reveal><span className="stay-micro">YOUR OWN PIECE OF THE ISLAND</span><h3 className="stay-suite-title" aria-label={room.name}><span>{titleStart}</span><em>{titleEnd}</em></h3></div>
             <div className="stay-suite-copy">
@@ -180,7 +182,7 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
           <div className="stay-detail-fold" data-open={detailsOpen} aria-hidden={!detailsOpen} inert={!detailsOpen} id={`${instanceId}-details`}>
             <div className="stay-detail-clip"><div className="stay-detail-content"><div><span className="stay-micro">THE CONSIDERED DETAILS</span><p>Made for<br /><em>unhurried living.</em></p></div><div><ul className="stay-room-features">{room.features.map((feature) => <li key={feature}><span aria-hidden="true">—</span>{feature}</li>)}</ul><a className="stay-official-source" href={room.source} target="_blank" rel="noopener noreferrer">Explore this space on Six Senses<span className="stay-accessible-only"> (opens in a new tab)</span></a></div></div></div>
           </div>
-          <p className="stay-factual-note">The photographs express a Mediterranean mood and do not depict the listed accommodations. Room details are sourced from Six Senses.</p>
+          <p className="stay-factual-note">Photography supplied for this study and enhanced with AI. Exact room categories are not verified from the images. Room details are sourced from Six Senses.</p>
         </div>
       </div>
       <p className="stay-accessible-only" aria-live="polite" aria-atomic="true">Accommodation {active + 1} of {rooms.length}: {room.name}.</p>
