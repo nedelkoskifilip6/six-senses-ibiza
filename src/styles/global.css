@@ -74,7 +74,7 @@ figcaption { font-size:8px; line-height:1.5; letter-spacing:.1em; padding-top:15
 .hero-bottom { display:flex; justify-content:space-between; align-items:flex-end; gap:30px; margin-top:6svh; }
 .hero-bottom p { max-width:380px; font-size:12px; line-height:1.8; }
 .hero-explore { display:inline-flex; align-items:center; min-height:58px; font-size:11px; border-bottom:1px solid #ffffff80; }
-.hero-explore:hover .hero-foot { position:absolute; left:var(--gutter); right:var(--gutter); bottom:44px; color:white; display:flex; justify-content:space-between; font-size:7px; letter-spacing:.13em; }
+.hero-foot { position:absolute; left:var(--gutter); right:var(--gutter); bottom:44px; color:white; display:flex; justify-content:space-between; font-size:7px; letter-spacing:.13em; }
 .hero-photo-note { position:absolute; bottom:17px; left:var(--gutter); font-size:7px; color:white; }
 .frame-secondary { position:absolute; left:6%; top:54%; width:25%; height:37%; visibility:hidden; }
 .frame-secondary img { height:calc(100% - 30px); object-position:52% 50%; }
