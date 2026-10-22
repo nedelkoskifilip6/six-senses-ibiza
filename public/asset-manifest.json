@@ -1,0 +1,163 @@
+{
+  "project": "Six Senses Ibiza — Independent Portfolio Concept",
+  "checkedAt": "2026-10-22",
+  "globalNotice": "Licensed Pexels photography illustrates this Mediterranean design concept. The architectural hero is photographed in Croatia and is not Six Senses Ibiza. Accommodation, spa and dining photographs are illustrative. Destination photographs retain their actual source locations in the credits.",
+  "assets": [
+    {
+      "slug": "hero",
+      "file": "work/photo-originals/hero.jpg",
+      "sourceURL": "https://www.pexels.com/photo/aerial-shot-of-seashore-with-boats-20056657/",
+      "downloadURL": "https://images.pexels.com/photos/20056657/pexels-photo-20056657.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Vitor Milanez",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Aerial view of boats in an Ibiza cove",
+      "visualDepiction": "Ibiza, Spain; not identified as Cala Xarraca or Six Senses",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "coast",
+      "file": "work/photo-originals/coast.jpg",
+      "sourceURL": "https://www.pexels.com/photo/scenic-coastal-resort-view-with-pool-and-mountains-32797308/",
+      "downloadURL": "https://images.pexels.com/photos/32797308/pexels-photo-32797308.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Sarah O’Shea",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Coastal resort, natural stone terraces and pool overlooking an Ibiza cove",
+      "visualDepiction": "Ibiza, Spain; resort is unnamed in source",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "suite",
+      "file": "work/photo-originals/suite.jpg",
+      "sourceURL": "https://www.pexels.com/photo/cozy-mediterranean-style-bedroom-in-tunisia-37086668/",
+      "downloadURL": "https://images.pexels.com/photos/37086668/pexels-photo-37086668.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "wael belkahla",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "White stone arch bedroom with natural linens and woven lights",
+      "visualDepiction": "Houmt Souk, Tunisia; illustrative accommodation imagery, not Six Senses",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "terrace",
+      "file": "work/photo-originals/terrace.jpg",
+      "sourceURL": "https://www.pexels.com/photo/view-of-the-sunset-from-a-terrace-in-a-luxurious-greek-resort-10611840/",
+      "downloadURL": "https://images.pexels.com/photos/10611840/pexels-photo-10611840.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "alleksana",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Minimal white terrace with cushioned seating at sunset above the sea",
+      "visualDepiction": "Santorini, Greece; illustrative terrace, not Six Senses",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "spa",
+      "file": "work/photo-originals/spa.jpg",
+      "sourceURL": "https://www.pexels.com/photo/interior-design-of-a-massage-room-11774389/",
+      "downloadURL": "https://images.pexels.com/photos/11774389/pexels-photo-11774389.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Tugce Erten Barrett",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Warm plaster spa treatment room with sculptural arch and treatment bed",
+      "visualDepiction": "Illustrative spa interior; not identified as Six Senses",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "dining",
+      "file": "work/photo-originals/dining.jpg",
+      "sourceURL": "https://www.pexels.com/photo/a-table-in-a-restaurant-17756435/",
+      "downloadURL": "https://images.pexels.com/photos/17756435/pexels-photo-17756435.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Joaquin Carfagna",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Sunlight across a linen table setting with blue patterned plates",
+      "visualDepiction": "Benidorm, Spain; illustrative dining, not Six Senses",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "food",
+      "file": "work/photo-originals/food.jpg",
+      "sourceURL": "https://www.pexels.com/photo/food-on-a-plate-3606800/",
+      "downloadURL": "https://images.pexels.com/photos/3606800/pexels-photo-3606800.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Sebastian Coman Photography",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Plated fish with shellfish and sauce on a fine dining table",
+      "visualDepiction": "London, UK; illustrative cuisine, not a Six Senses menu dish",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "sunset",
+      "file": "work/photo-originals/sunset.jpg",
+      "sourceURL": "https://www.pexels.com/photo/serene-view-of-es-vedra-island-at-sunset-33881205/",
+      "downloadURL": "https://images.pexels.com/photos/33881205/pexels-photo-33881205.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Ben B.",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Soft sunset light on Es Vedrà framed by coastal pine",
+      "visualDepiction": "Ibiza, Spain; destination image, not Cala Xarraca",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "olive",
+      "file": "work/photo-originals/olive.jpg",
+      "sourceURL": "https://www.pexels.com/photo/serene-olive-branch-in-mediterranean-sunlight-32329364/",
+      "downloadURL": "https://images.pexels.com/photos/32329364/pexels-photo-32329364.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Emre Ozyemisci",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Olive branch and green olives in pale Mediterranean light",
+      "visualDepiction": "Muğla, Türkiye; illustrative Mediterranean nature",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "kayak",
+      "file": "work/photo-originals/kayak.jpg",
+      "sourceURL": "https://www.pexels.com/photo/sunset-kayaking-by-the-mediterranean-coast-33064576/",
+      "downloadURL": "https://images.pexels.com/photos/33064576/pexels-photo-33064576.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Kader Azra Namuslu",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Paddleboarders on warm evening water with white coastal architecture",
+      "visualDepiction": "Greece; source calls this kayaking, visual is paddleboarding; use caption Coastal exploration",
+      "usageNote": "Licensed illustrative photography. Does not depict Six Senses Ibiza unless separately verified. No endorsement implied."
+    },
+    {
+      "slug": "suite-wide",
+      "file": "work/photo-originals/suite-wide.jpg",
+      "sourceURL": "https://www.pexels.com/photo/interior-of-bright-room-in-hotel-6186819/",
+      "downloadURL": "https://images.pexels.com/photos/6186819/pexels-photo-6186819.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "author": "Max Vakhtbovych",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Horizontal ivory and natural timber bedroom with sculptural wall detail and linen curtains",
+      "visualDepiction": "Illustrative accommodation interior; not Six Senses Ibiza",
+      "usageNote": "Optional horizontal alternative or extra gallery photograph. No endorsement implied."
+    },
+    {
+      "slug": "suite-view",
+      "file": "work/photo-originals/suite-view.jpg",
+      "sourceURL": "https://www.pexels.com/photo/luxury-hotel-room-14746040/",
+      "downloadURL": "https://images.pexels.com/photos/14746040/pexels-photo-14746040.jpeg?auto=compress&cs=tinysrgb&w=3000",
+      "author": "Rosie C",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "White bed, natural timber ceiling, green cane sofa and sliding doors to a sea terrace",
+      "visualDepiction": "Unspecified coastal location; illustrative suite, not Six Senses Ibiza",
+      "usageNote": "Licensed illustrative photography. Not Six Senses Ibiza. No endorsement implied."
+    },
+    {
+      "slug": "pool-villa",
+      "file": "work/photo-originals/pool-villa.jpg",
+      "sourceURL": "https://www.pexels.com/photo/luxury-mediterranean-villa-with-pool-and-sea-view-29702291/",
+      "downloadURL": "https://images.pexels.com/photos/29702291/pexels-photo-29702291.jpeg?auto=compress&cs=tinysrgb&w=3000",
+      "author": "Ahmet ÇÖTÜR",
+      "license": "Pexels License",
+      "licenseURL": "https://www.pexels.com/license/",
+      "description": "Broad pool and terrace with modern natural stone villas overlooking a blue Mediterranean horizon",
+      "visualDepiction": "Croatia according to source; illustrative villa, not Six Senses Ibiza",
+      "usageNote": "Licensed illustrative photography. Not Six Senses Ibiza. No endorsement implied."
+    }
+  ]
+}

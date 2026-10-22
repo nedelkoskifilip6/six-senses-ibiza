@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nedelkoskifilip6.github.io/six-senses-ibiza/sitemap.xml
