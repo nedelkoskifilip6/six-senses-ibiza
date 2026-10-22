@@ -1,7 +1,7 @@
 {
   "project": "Six Senses Ibiza — Independent Portfolio Concept",
   "checkedAt": "2026-10-22",
-  "globalNotice": "Desktop and mobile Hero photographs were supplied for this independent portfolio concept. Other photography uses the Pexels License and illustrates the Mediterranean atmosphere. Accommodation, spa and dining photographs are illustrative. Destination photographs retain their actual source locations in the credits.",
+  "globalNotice": "Hero photographs were supplied by the portfolio owner and enhanced with AI for cleanup and brighter exposure. Other photography uses the Pexels License and illustrates the Mediterranean atmosphere. Accommodation, spa and dining photographs are illustrative. Destination photographs retain their actual source locations in the credits.",
   "assets": [
     {
       "slug": "hero",
@@ -162,28 +162,34 @@
   ],
   "heroPhotography": [
     {
-      "slug": "hero-desktop",
-      "file": "work/hero-desktop-supplied.jpg",
+      "slug": "hero-desktop-clean",
+      "file": "outputs/hero-ai-desktop.png",
       "source": "Photo 1.jpg supplied by the portfolio owner",
-      "width": 1280,
-      "height": 800,
+      "width": 1586,
+      "height": 992,
       "variants": [
         800,
-        1280
+        1280,
+        1586
       ],
-      "usageNote": "User-supplied Hero photography. No Pexels attribution or independent location verification is claimed."
+      "usageNote": "AI-enhanced from user-supplied photography for this independent portfolio study. Not an official resort asset or unedited documentary photograph.",
+      "originalFile": "work/hero-desktop-supplied.jpg",
+      "enhancement": "AI-assisted cleanup, natural texture restoration and brighter exposure; built-in image_gen."
     },
     {
-      "slug": "hero-mobile",
-      "file": "work/hero-mobile-supplied.jpg",
+      "slug": "hero-mobile-clean",
+      "file": "outputs/hero-ai-mobile.png",
       "source": "Photo 2.jpg supplied by the portfolio owner",
-      "width": 720,
-      "height": 1280,
+      "width": 941,
+      "height": 1672,
       "variants": [
         480,
-        720
+        720,
+        941
       ],
-      "usageNote": "User-supplied Hero photography. No Pexels attribution or independent location verification is claimed."
+      "usageNote": "AI-enhanced from user-supplied photography for this independent portfolio study. Not an official resort asset or unedited documentary photograph.",
+      "originalFile": "work/hero-mobile-supplied.jpg",
+      "enhancement": "AI-assisted cleanup, natural texture restoration and brighter exposure; built-in image_gen."
     }
   ]
 }
