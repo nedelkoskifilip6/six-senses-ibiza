@@ -16,10 +16,6 @@ export interface Accommodation {
 
 interface StayGalleryProps { rooms: Accommodation[]; imageBase: string; }
 
-function Arrow({ direction = 'right' }: { direction?: 'left' | 'right' }) {
-  return <svg aria-hidden="true" viewBox="0 0 32 16" fill="none" width="32" height="16"><path d={direction === 'left' ? 'M30 8H2m0 0 7-7M2 8l7 7' : 'M2 8h28m0 0-7-7m7 7-7 7'} stroke="currentColor" strokeWidth="1.2" /></svg>;
-}
-
 const number = (value: number) => String(value + 1).padStart(2, '0');
 
 export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
@@ -156,11 +152,11 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
               key={item.id} type="button" role="tab" className={`stay-category${active === index ? ' stay-category-active' : ''}`}
               id={`${instanceId}-tab-${index}`} aria-controls={`${instanceId}-panel`} aria-selected={active === index} tabIndex={active === index ? 0 : -1}
               ref={(node) => { tabRefs.current[index] = node; }} onClick={() => selectRoom(index)} onKeyDown={(event) => onTabKey(event, index)}
-            ><span className="stay-category-number">{number(index)}</span><span className="stay-category-name">{item.shortName}</span><span className="stay-category-mark" aria-hidden="true">↗</span></button>)}
+            ><span className="stay-category-number">{number(index)}</span><span className="stay-category-name">{item.shortName}</span></button>)}
           </div>
           <button type="button" className="stay-next-preview" onClick={() => selectRoom(activeRef.current + 1)} aria-label={`Explore next: ${nextRoom.name}`}>
             <span className="stay-next-image"><img src={`${imageBase}${nextRoom.image}-800.webp`} alt="" width="800" height="600" loading="lazy" decoding="async" /></span>
-            <span className="stay-next-caption"><span>NEXT IN THE COLLECTION</span><span aria-hidden="true">↗</span></span>
+            <span className="stay-next-caption"><span>NEXT IN THE COLLECTION</span></span>
             <span className="stay-next-name">{nextRoom.shortName}</span>
           </button>
         </aside>
@@ -170,9 +166,9 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
             <img className="stay-photo-underlay" src={`${imageBase}${previousRoom.image}-1600.webp`} alt="" aria-hidden="true" width="1600" height="1100" loading="lazy" decoding="async" />
             <img ref={photoRef} key={room.id} className="stay-photo-current" src={`${imageBase}${room.image}-1600.webp`} srcSet={`${imageBase}${room.image}-800.webp 800w, ${imageBase}${room.image}-1600.webp 1600w, ${imageBase}${room.image}-2400.webp 2400w`} sizes="(max-width: 850px) 90vw, 65vw" alt={`Illustrative architectural reference for ${room.name}; not the actual Six Senses accommodation`} width="1600" height="1100" loading="lazy" decoding="async" onLoad={() => { readyImageRef.current = active; }} />
             <span className="stay-photo-index" aria-hidden="true"><span>N°</span>{number(active)}</span>
-            <button type="button" className="stay-open-collection" onClick={openCollection} aria-label="Open the illustrative accommodation photo collection full screen"><svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" stroke="currentColor" strokeWidth="1.2" /></svg><span>VIEW THE COLLECTION</span></button>
+            <button type="button" className="stay-open-collection" onClick={openCollection} aria-label="Open the illustrative accommodation photo collection full screen"><span>VIEW THE COLLECTION</span></button>
           </div>
-          <div className="stay-photo-ledger"><span>SPACES FOR SLOWER DAYS</span><span>ILLUSTRATIVE PHOTOGRAPHY</span><div className="stay-step-controls"><button type="button" aria-label="Previous accommodation" onClick={() => selectRoom(activeRef.current - 1)}><Arrow direction="left" /></button><span aria-hidden="true">{number(active)} <i>/</i> {String(rooms.length).padStart(2, '0')}</span><button type="button" aria-label="Next accommodation" onClick={() => selectRoom(activeRef.current + 1)}><Arrow /></button></div></div>
+          <div className="stay-photo-ledger"><span>SPACES FOR SLOWER DAYS</span><span>ILLUSTRATIVE PHOTOGRAPHY</span><div className="stay-step-controls"><button type="button" aria-label="Previous accommodation" onClick={() => selectRoom(activeRef.current - 1)}><span>Previous</span></button><span aria-hidden="true">{number(active)} <i>/</i> {String(rooms.length).padStart(2, '0')}</span><button type="button" aria-label="Next accommodation" onClick={() => selectRoom(activeRef.current + 1)}><span>Next</span></button></div></div>
           <div ref={storyRef} className="stay-editorial">
             <div className="stay-title-block" data-stay-reveal><span className="stay-micro">YOUR OWN PIECE OF THE ISLAND</span><h3 className="stay-suite-title" aria-label={room.name}><span>{titleStart}</span><em>{titleEnd}</em></h3></div>
             <div className="stay-suite-copy">
@@ -182,7 +178,7 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
             </div>
           </div>
           <div className="stay-detail-fold" data-open={detailsOpen} aria-hidden={!detailsOpen} inert={!detailsOpen} id={`${instanceId}-details`}>
-            <div className="stay-detail-clip"><div className="stay-detail-content"><div><span className="stay-micro">THE CONSIDERED DETAILS</span><p>Made for<br /><em>unhurried living.</em></p></div><div><ul className="stay-room-features">{room.features.map((feature) => <li key={feature}><span aria-hidden="true">—</span>{feature}</li>)}</ul><a className="stay-official-source" href={room.source} target="_blank" rel="noopener noreferrer">Explore this space on Six Senses <span aria-hidden="true">↗</span><span className="stay-accessible-only"> (opens in a new tab)</span></a></div></div></div>
+            <div className="stay-detail-clip"><div className="stay-detail-content"><div><span className="stay-micro">THE CONSIDERED DETAILS</span><p>Made for<br /><em>unhurried living.</em></p></div><div><ul className="stay-room-features">{room.features.map((feature) => <li key={feature}><span aria-hidden="true">—</span>{feature}</li>)}</ul><a className="stay-official-source" href={room.source} target="_blank" rel="noopener noreferrer">Explore this space on Six Senses<span className="stay-accessible-only"> (opens in a new tab)</span></a></div></div></div>
           </div>
           <p className="stay-factual-note">The photographs express a Mediterranean mood and do not depict the listed accommodations. Room details are sourced from Six Senses.</p>
         </div>

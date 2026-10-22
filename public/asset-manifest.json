@@ -1,7 +1,7 @@
 {
   "project": "Six Senses Ibiza — Independent Portfolio Concept",
   "checkedAt": "2026-10-22",
-  "globalNotice": "Licensed Pexels photography illustrates this Mediterranean design concept. The architectural hero is photographed in Croatia and is not Six Senses Ibiza. Accommodation, spa and dining photographs are illustrative. Destination photographs retain their actual source locations in the credits.",
+  "globalNotice": "Desktop and mobile Hero photographs were supplied for this independent portfolio concept. Other photography uses the Pexels License and illustrates the Mediterranean atmosphere. Accommodation, spa and dining photographs are illustrative. Destination photographs retain their actual source locations in the credits.",
   "assets": [
     {
       "slug": "hero",
@@ -158,6 +158,32 @@
       "description": "Broad pool and terrace with modern natural stone villas overlooking a blue Mediterranean horizon",
       "visualDepiction": "Croatia according to source; illustrative villa, not Six Senses Ibiza",
       "usageNote": "Licensed illustrative photography. Not Six Senses Ibiza. No endorsement implied."
+    }
+  ],
+  "heroPhotography": [
+    {
+      "slug": "hero-desktop",
+      "file": "work/hero-desktop-supplied.jpg",
+      "source": "Photo 1.jpg supplied by the portfolio owner",
+      "width": 1280,
+      "height": 800,
+      "variants": [
+        800,
+        1280
+      ],
+      "usageNote": "User-supplied Hero photography. No Pexels attribution or independent location verification is claimed."
+    },
+    {
+      "slug": "hero-mobile",
+      "file": "work/hero-mobile-supplied.jpg",
+      "source": "Photo 2.jpg supplied by the portfolio owner",
+      "width": 720,
+      "height": 1280,
+      "variants": [
+        480,
+        720
+      ],
+      "usageNote": "User-supplied Hero photography. No Pexels attribution or independent location verification is claimed."
     }
   ]
 }
