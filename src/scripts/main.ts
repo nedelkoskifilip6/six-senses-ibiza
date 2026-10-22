@@ -113,7 +113,8 @@ const setExperience = (index:number,focus=false) => {
   document.querySelector('#experience-description')!.textContent=item.description;
   (document.querySelector('#experience-link') as HTMLAnchorElement).href=official+item.url;
   const img=document.querySelector<HTMLImageElement>('.experience-photo img')!;
-  img.srcset=`${imageBase}${item.image}-800.webp 800w, ${imageBase}${item.image}-1600.webp 1600w, ${imageBase}${item.image}-2400.webp 2400w`;
+  const largestWidth=['kayak','olive'].includes(item.image)?2000:2400;
+  img.srcset=`${imageBase}${item.image}-800.webp 800w, ${imageBase}${item.image}-1600.webp 1600w, ${imageBase}${item.image}-2400.webp ${largestWidth}w`;
   img.src=`${imageBase}${item.image}-1600.webp`;
   img.alt=item.alt;
   img.style.objectPosition=item.position;
