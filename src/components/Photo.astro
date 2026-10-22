@@ -1,26 +1,10 @@
 ---
+import { photoDimensions, photoSrcSet } from '../data/photography';
 interface Props { image: string; alt: string; class?: string; eager?: boolean; sizes?: string; }
 const { image, alt, class: className = '', eager = false, sizes = '(max-width: 700px) 100vw, 70vw' } = Astro.props;
 const base = `${import.meta.env.BASE_URL}images/`;
-const sourceDimensions: Record<string, [number, number]> = {
-  hero: [2400, 1350],
-  coast: [2400, 3200],
-  suite: [2400, 3200],
-  terrace: [2400, 1600],
-  spa: [2000, 2667],
-  dining: [2400, 3600],
-  food: [2000, 1333],
-  sunset: [2400, 1595],
-  olive: [2000, 1335],
-  kayak: [2000, 3563],
-  'suite-wide': [2400, 1602],
-  'suite-view': [2400, 3200],
-  'pool-villa': [2400, 1600],
-};
-const [sourceWidth, sourceHeight] = sourceDimensions[image] ?? [2400, 1600];
+const [sourceWidth, sourceHeight] = photoDimensions(image);
 const intrinsicWidth = Math.min(1600, sourceWidth);
 const intrinsicHeight = Math.round(sourceHeight * intrinsicWidth / sourceWidth);
-// The largest filename is retained even when the optimizer caps it at the source width.
-const largestWidth = Math.min(2400, sourceWidth);
 ---
-<img class={className} src={`${base}${image}-1600.webp`} srcset={`${base}${image}-800.webp 800w, ${base}${image}-1600.webp 1600w, ${base}${image}-2400.webp ${largestWidth}w`} sizes={sizes} width={intrinsicWidth} height={intrinsicHeight} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
+<img class={className} src={`${base}${image}-1600.webp`} srcset={photoSrcSet(image, base)} sizes={sizes} width={intrinsicWidth} height={intrinsicHeight} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />

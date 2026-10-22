@@ -1,7 +1,7 @@
 {
   "project": "Six Senses Ibiza — Independent Portfolio Concept",
-  "checkedAt": "2026-10-22",
-  "globalNotice": "Hero photographs were supplied by the portfolio owner and enhanced with AI for cleanup and brighter exposure. Other photography uses the Pexels License and illustrates the Mediterranean atmosphere. Accommodation, spa and dining photographs are illustrative. Destination photographs retain their actual source locations in the credits.",
+  "checkedAt": "2026-10-23",
+  "globalNotice": "Hero and selected editorial photographs were supplied by the portfolio owner and enhanced with AI. Remaining photography uses the Pexels License and retains source locations in the credits. Exact room categories are not attributed from supplied images. This is an independent portfolio concept.",
   "assets": [
     {
       "slug": "hero",
@@ -190,6 +190,136 @@
       "usageNote": "AI-enhanced from user-supplied photography for this independent portfolio study. Not an official resort asset or unedited documentary photograph.",
       "originalFile": "work/hero-mobile-supplied.jpg",
       "enhancement": "AI-assisted cleanup, natural texture restoration and brighter exposure; built-in image_gen."
+    }
+  ],
+  "suppliedPhotography": [
+    {
+      "slug": "supplied-terrace-clean",
+      "file": "outputs/replacement-photos/photo-01-clean.png",
+      "source": "Photo 1.jpg / Photo 10.jpg supplied by the portfolio owner on 23 October 2026",
+      "description": "Sunset terrace beneath a timber pergola",
+      "placement": "Hero transition; Visual Journal image 3",
+      "width": 1254,
+      "height": 1254,
+      "variants": [
+        800,
+        1600,
+        2400
+      ],
+      "enhancement": "Conservative AI-assisted cleanup using the built-in image_gen edit tool; responsive WebP conversion with Sharp.",
+      "usageNote": "User-supplied photography, enhanced with AI for this independent portfolio study. Fine details may be interpreted by AI. Exact property and room-category attribution is not asserted. No official affiliation implied."
+    },
+    {
+      "slug": "supplied-lounge-clean",
+      "file": "outputs/replacement-photos/photo-02-clean.png",
+      "source": "Photo 2.jpg / Photo 9.jpg supplied by the portfolio owner on 23 October 2026",
+      "description": "Open-air lounge and terrace at twilight",
+      "placement": "The Sanctuary; Visual Journal image 2",
+      "width": 1121,
+      "height": 1403,
+      "variants": [
+        800,
+        1600,
+        2400
+      ],
+      "enhancement": "Conservative AI-assisted cleanup using the built-in image_gen edit tool; responsive WebP conversion with Sharp.",
+      "usageNote": "User-supplied photography, enhanced with AI for this independent portfolio study. Fine details may be interpreted by AI. Exact property and room-category attribution is not asserted. No official affiliation implied."
+    },
+    {
+      "slug": "supplied-residence-01-clean",
+      "file": "outputs/replacement-photos/photo-03-clean.png",
+      "source": "Photo 3.jpg supplied by the portfolio owner on 23 October 2026",
+      "description": "Sunlit terrace with curved steps and a bay view",
+      "placement": "The Residences image 1",
+      "width": 1536,
+      "height": 1024,
+      "variants": [
+        800,
+        1600,
+        2400
+      ],
+      "enhancement": "Conservative AI-assisted cleanup using the built-in image_gen edit tool; responsive WebP conversion with Sharp.",
+      "usageNote": "User-supplied photography, enhanced with AI for this independent portfolio study. Fine details may be interpreted by AI. Exact property and room-category attribution is not asserted. No official affiliation implied."
+    },
+    {
+      "slug": "supplied-residence-02-clean",
+      "file": "outputs/replacement-photos/photo-04-clean.png",
+      "source": "Photo 4.jpg supplied by the portfolio owner on 23 October 2026",
+      "description": "Living room opening onto a terrace and the bay",
+      "placement": "The Residences image 2",
+      "width": 1448,
+      "height": 1086,
+      "variants": [
+        800,
+        1600,
+        2400
+      ],
+      "enhancement": "Conservative AI-assisted cleanup using the built-in image_gen edit tool; responsive WebP conversion with Sharp.",
+      "usageNote": "User-supplied photography, enhanced with AI for this independent portfolio study. Fine details may be interpreted by AI. Exact property and room-category attribution is not asserted. No official affiliation implied."
+    },
+    {
+      "slug": "supplied-residence-03-clean",
+      "file": "outputs/replacement-photos/photo-05-clean.png",
+      "source": "Photo 5.jpg supplied by the portfolio owner on 23 October 2026",
+      "description": "Sea-facing bedroom with woven details",
+      "placement": "The Residences image 3",
+      "width": 1448,
+      "height": 1086,
+      "variants": [
+        800,
+        1600,
+        2400
+      ],
+      "enhancement": "Conservative AI-assisted cleanup using the built-in image_gen edit tool; responsive WebP conversion with Sharp.",
+      "usageNote": "User-supplied photography, enhanced with AI for this independent portfolio study. Fine details may be interpreted by AI. Exact property and room-category attribution is not asserted. No official affiliation implied."
+    },
+    {
+      "slug": "supplied-residence-04-clean",
+      "file": "outputs/replacement-photos/photo-06-clean.png",
+      "source": "Attachment 6, named Photo 7.jpg supplied by the portfolio owner on 23 October 2026",
+      "description": "Evening lounge and open terrace",
+      "placement": "The Residences image 4",
+      "width": 1622,
+      "height": 969,
+      "variants": [
+        800,
+        1600,
+        2400
+      ],
+      "enhancement": "Conservative AI-assisted cleanup using the built-in image_gen edit tool; responsive WebP conversion with Sharp.",
+      "usageNote": "User-supplied photography, enhanced with AI for this independent portfolio study. Fine details may be interpreted by AI. Exact property and room-category attribution is not asserted. No official affiliation implied."
+    },
+    {
+      "slug": "supplied-residence-05-clean",
+      "file": "outputs/replacement-photos/photo-07-clean.png",
+      "source": "Attachment 7, named Photo 7.jpg supplied by the portfolio owner on 23 October 2026",
+      "description": "Infinity pool and sun loungers at dusk",
+      "placement": "The Residences image 5",
+      "width": 1536,
+      "height": 1024,
+      "variants": [
+        800,
+        1600,
+        2400
+      ],
+      "enhancement": "Conservative AI-assisted cleanup using the built-in image_gen edit tool; responsive WebP conversion with Sharp.",
+      "usageNote": "User-supplied photography, enhanced with AI for this independent portfolio study. Fine details may be interpreted by AI. Exact property and room-category attribution is not asserted. No official affiliation implied."
+    },
+    {
+      "slug": "supplied-pool-aerial-clean",
+      "file": "outputs/replacement-photos/photo-08-clean.png",
+      "source": "Photo 8.jpg supplied by the portfolio owner on 23 October 2026",
+      "description": "Aerial pool study with parasols and limestone paving",
+      "placement": "Visual Journal image 1",
+      "width": 1254,
+      "height": 1254,
+      "variants": [
+        800,
+        1600,
+        2400
+      ],
+      "enhancement": "Conservative AI-assisted cleanup using the built-in image_gen edit tool; responsive WebP conversion with Sharp.",
+      "usageNote": "User-supplied photography, enhanced with AI for this independent portfolio study. Fine details may be interpreted by AI. Exact property and room-category attribution is not asserted. No official affiliation implied."
     }
   ]
 }
