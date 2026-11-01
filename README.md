@@ -4,7 +4,7 @@ An independent luxury hospitality portfolio concept by Filip Nedelkoski. **Not a
 
 ## Experience
 
-A bright architectural and editorial redesign built around **“The Beauty of Being.”** A full-screen Mediterranean villa photograph moves into a framed composition through a reversible GSAP ScrollTrigger sequence, revealing oversized typography and a second photograph. Ivory sections, expressive serif typography, natural materials and generous spacing carry the story through the sanctuary, accommodation, wellness, dining, island experiences and sustainability.
+A bright architectural and editorial redesign built around **“The Beauty of Being.”** A full-screen Mediterranean villa photograph gently crossfades into a quiet ivory composition with editorial typography and a second photograph. The reversible GSAP ScrollTrigger sequence changes opacity only; the Hero entrance follows the same calm fade language. Ivory sections, expressive serif typography, natural materials and generous spacing carry the story through the sanctuary, accommodation, wellness, dining, island experiences and sustainability.
 
 The five-category suite explorer combines an accommodation directory, animated photography, expandable verified details, a next-room preview and a full-screen viewer. A separate expanding terrace composition introduces indoor–outdoor living. Three selectable experiences and a six-image horizontal photo journal complete the galleries. Keyboard navigation, touch swipes and reduced-motion preferences are supported; the shared photo viewer includes Escape and focus restoration.
 
