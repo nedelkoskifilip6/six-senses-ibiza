@@ -25,7 +25,7 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
   const [previous, setPrevious] = useState(0);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [hasNavigated, setHasNavigated] = useState(false);
-  const orientation = 'horizontal' as const;
+  const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>('vertical');
   const instanceId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const photoRef = useRef<HTMLImageElement>(null);
@@ -39,6 +39,14 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
   const room = rooms[active];
   const previousRoom = rooms[previous];
   const nextRoom = rooms[(active + 1) % rooms.length];
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 850px)');
+    const update = () => setOrientation(media.matches ? 'horizontal' : 'vertical');
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
 
   useEffect(() => {
     if (rooms.length < 2) return;
@@ -58,12 +66,12 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
     let imageTween: gsap.core.Tween | undefined;
     let disposed = false;
     const fromRight = directionRef.current > 0;
-    gsap.set(image, { clipPath: fromRight ? 'inset(0% 0% 0% 100%)' : 'inset(0% 100% 0% 0%)', scale: 1.025 });
-    const textTween = gsap.fromTo(copy, { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .52, stagger: .035, ease: 'power2.out', overwrite: true });
+    gsap.set(image, { clipPath: fromRight ? 'inset(0% 0% 0% 100%)' : 'inset(0% 100% 0% 0%)', scale: 1.045 });
+    const textTween = gsap.fromTo(copy, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .62, stagger: .045, ease: 'power2.out', overwrite: true });
     const reveal = () => {
       if (disposed) return;
       readyImageRef.current = active;
-      imageTween = gsap.to(image, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: .85, ease: 'power2.inOut', overwrite: true });
+      imageTween = gsap.to(image, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: .95, ease: 'power3.inOut', overwrite: true });
     };
     if (image.complete && image.naturalWidth) reveal();
     else image.addEventListener('load', reveal, { once: true });
@@ -141,51 +149,42 @@ export default function StayGallery({ rooms, imageBase }: StayGalleryProps) {
   return (
     <section className="stay-explorer" aria-label="The accommodation collection" aria-roledescription="carousel" onKeyDown={onGalleryKey}>
       <div className="stay-atlas">
-        <header className="stay-directory-heading">
-          <span className="stay-micro">THE COLLECTION</span>
-          <p>Not simply a room.<br /><span>A way of being.</span></p>
-        </header>
-
-        <div className="stay-directory" role="tablist" aria-label="Choose your accommodation" aria-orientation={orientation}>
-          {rooms.map((item, index) => <button
-            key={item.id} type="button" role="tab" className={`stay-category${active === index ? ' stay-category-active' : ''}`}
-            id={`${instanceId}-tab-${index}`} aria-controls={`${instanceId}-panel`} aria-selected={active === index} tabIndex={active === index ? 0 : -1}
-            ref={(node) => { tabRefs.current[index] = node; }} onClick={() => selectRoom(index)} onKeyDown={(event) => onTabKey(event, index)}
-          ><span className="stay-category-number">{number(index)}</span><span className="stay-category-name">{item.shortName}</span></button>)}
-        </div>
+        <aside className="stay-rail">
+          <div className="stay-directory-heading"><span className="stay-micro">THE COLLECTION</span><p>Not simply a room.<br /><em>A way of being.</em></p></div>
+          <div className="stay-directory" role="tablist" aria-label="Choose your accommodation" aria-orientation={orientation}>
+            {rooms.map((item, index) => <button
+              key={item.id} type="button" role="tab" className={`stay-category${active === index ? ' stay-category-active' : ''}`}
+              id={`${instanceId}-tab-${index}`} aria-controls={`${instanceId}-panel`} aria-selected={active === index} tabIndex={active === index ? 0 : -1}
+              ref={(node) => { tabRefs.current[index] = node; }} onClick={() => selectRoom(index)} onKeyDown={(event) => onTabKey(event, index)}
+            ><span className="stay-category-number">{number(index)}</span><span className="stay-category-name">{item.shortName}</span></button>)}
+          </div>
+          <button type="button" className="stay-next-preview" onClick={() => selectRoom(activeRef.current + 1)} aria-label={`Explore next: ${nextRoom.name}`}>
+            <span className="stay-next-image"><img src={`${imageBase}${nextRoom.image}-800.webp`} alt="" width="800" height="600" loading="lazy" decoding="async" /></span>
+            <span className="stay-next-caption"><span>NEXT IN THE COLLECTION</span></span>
+            <span className="stay-next-name">{nextRoom.shortName}</span>
+          </button>
+        </aside>
 
         <div ref={panelRef} className="stay-suite" role="tabpanel" id={`${instanceId}-panel`} aria-labelledby={`${instanceId}-tab-${active}`} tabIndex={0}>
           <div className="stay-photo-stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onTouchCancel={() => { touchStart.current = null; }}>
-            <img className="stay-photo-underlay" src={`${imageBase}${previousRoom.image}-1600.webp`} srcSet={photoSrcSet(previousRoom.image, imageBase)} sizes="88vw" alt="" aria-hidden="true" width={photoDimensions(previousRoom.image)[0]} height={photoDimensions(previousRoom.image)[1]} loading="lazy" decoding="async" />
-            <img ref={photoRef} key={room.id} className="stay-photo-current" src={`${imageBase}${room.image}-1600.webp`} srcSet={photoSrcSet(room.image, imageBase)} sizes="88vw" alt={`${room.imageAlt}; supplied photography enhanced with AI`} width={photoDimensions(room.image)[0]} height={photoDimensions(room.image)[1]} loading={hasNavigated ? 'eager' : 'lazy'} decoding="async" onLoad={() => { readyImageRef.current = active; }} />
+            <img className="stay-photo-underlay" src={`${imageBase}${previousRoom.image}-1600.webp`} alt="" aria-hidden="true" width="1600" height="1100" loading="lazy" decoding="async" />
+            <img ref={photoRef} key={room.id} className="stay-photo-current" src={`${imageBase}${room.image}-1600.webp`} srcSet={photoSrcSet(room.image, imageBase)} sizes="(max-width: 850px) 90vw, 65vw" alt={`${room.imageAlt}; supplied photography enhanced with AI`} width={photoDimensions(room.image)[0]} height={photoDimensions(room.image)[1]} loading={hasNavigated ? 'eager' : 'lazy'} decoding="async" onLoad={() => { readyImageRef.current = active; }} />
+            <span className="stay-photo-index" aria-hidden="true"><span>N°</span>{number(active)}</span>
+            <button type="button" className="stay-open-collection" onClick={openCollection} aria-label="Open the accommodation photo collection full screen"><span>VIEW THE COLLECTION</span></button>
           </div>
-
-          <div className="stay-photo-ledger">
-            <div className="stay-photo-caption"><span className="stay-photo-index" aria-hidden="true"><span>N°</span>{number(active)}</span><span>SPACES FOR SLOWER DAYS<small>AI-ENHANCED PHOTOGRAPHY</small></span></div>
-            <button type="button" className="stay-open-collection" onClick={openCollection} aria-label="View the collection full screen"><span>VIEW THE COLLECTION</span></button>
-            <div className="stay-step-controls"><button type="button" aria-label="Previous accommodation" onClick={() => selectRoom(activeRef.current - 1)}><span>Previous</span></button><span aria-hidden="true">{number(active)} <i>/</i> {String(rooms.length).padStart(2, '0')}</span><button type="button" aria-label="Next accommodation" onClick={() => selectRoom(activeRef.current + 1)}><span>Next</span></button></div>
-          </div>
-
+          <div className="stay-photo-ledger"><span>SPACES FOR SLOWER DAYS</span><span>AI-ENHANCED PHOTOGRAPHY</span><div className="stay-step-controls"><button type="button" aria-label="Previous accommodation" onClick={() => selectRoom(activeRef.current - 1)}><span>Previous</span></button><span aria-hidden="true">{number(active)} <i>/</i> {String(rooms.length).padStart(2, '0')}</span><button type="button" aria-label="Next accommodation" onClick={() => selectRoom(activeRef.current + 1)}><span>Next</span></button></div></div>
           <div ref={storyRef} className="stay-editorial">
-            <div className="stay-title-block" data-stay-reveal><span className="stay-micro">YOUR OWN PIECE OF THE ISLAND</span><h3 className="stay-suite-title" aria-label={room.name}><span>{titleStart}</span><span>{titleEnd}</span></h3></div>
-            <p className="stay-suite-description" data-stay-reveal>{room.description}</p>
-            <div className="stay-suite-copy" data-stay-reveal>
-              <dl className="stay-room-facts"><div><dt>SPACE</dt><dd>{room.size}</dd></div><div><dt>GUESTS</dt><dd>{room.guests}</dd></div></dl>
+            <div className="stay-title-block" data-stay-reveal><span className="stay-micro">YOUR OWN PIECE OF THE ISLAND</span><h3 className="stay-suite-title" aria-label={room.name}><span>{titleStart}</span><em>{titleEnd}</em></h3></div>
+            <div className="stay-suite-copy">
+              <p className="stay-suite-description" data-stay-reveal>{room.description}</p>
+              <dl className="stay-room-facts" data-stay-reveal><div><dt>SPACE</dt><dd>{room.size}</dd></div><div><dt>GUESTS</dt><dd>{room.guests}</dd></div></dl>
               <button type="button" className="stay-disclosure" aria-expanded={detailsOpen} aria-controls={`${instanceId}-details`} onClick={() => setDetailsOpen((open) => !open)}><span>{detailsOpen ? 'A closer look, complete' : 'A closer look'}</span><span className="stay-disclosure-symbol" aria-hidden="true">{detailsOpen ? '−' : '+'}</span></button>
             </div>
           </div>
-
           <div className="stay-detail-fold" data-open={detailsOpen} aria-hidden={!detailsOpen} inert={!detailsOpen} id={`${instanceId}-details`}>
-            <div className="stay-detail-clip"><div className="stay-detail-content"><div><span className="stay-micro">THE CONSIDERED DETAILS</span><p>Made for<br /><span>unhurried living.</span></p></div><div><ul className="stay-room-features">{room.features.map((feature) => <li key={feature}><span aria-hidden="true">—</span>{feature}</li>)}</ul><a className="stay-official-source" href={room.source} target="_blank" rel="noopener noreferrer">Explore this space on Six Senses<span className="stay-accessible-only"> (opens in a new tab)</span></a></div></div></div>
+            <div className="stay-detail-clip"><div className="stay-detail-content"><div><span className="stay-micro">THE CONSIDERED DETAILS</span><p>Made for<br /><em>unhurried living.</em></p></div><div><ul className="stay-room-features">{room.features.map((feature) => <li key={feature}><span aria-hidden="true">—</span>{feature}</li>)}</ul><a className="stay-official-source" href={room.source} target="_blank" rel="noopener noreferrer">Explore this space on Six Senses<span className="stay-accessible-only"> (opens in a new tab)</span></a></div></div></div>
           </div>
-
-          <div className="stay-collection-foot">
-            <p className="stay-factual-note">Photography supplied for this study and enhanced with AI. Exact room categories are not verified from the images. Room details are sourced from Six Senses.</p>
-            <button type="button" className="stay-next-preview" onClick={() => selectRoom(activeRef.current + 1)} aria-label={`Explore next: ${nextRoom.name}`}>
-              <span className="stay-next-image"><img src={`${imageBase}${nextRoom.image}-800.webp`} srcSet={photoSrcSet(nextRoom.image, imageBase, 800)} sizes="(max-width:600px) 96px, 160px" alt="" width={photoDimensions(nextRoom.image)[0]} height={photoDimensions(nextRoom.image)[1]} loading="lazy" decoding="async" /></span>
-              <span className="stay-next-caption"><span>NEXT IN THE COLLECTION</span><span className="stay-next-name">{nextRoom.shortName}</span></span>
-            </button>
-          </div>
+          <p className="stay-factual-note">Photography supplied for this study and enhanced with AI. Exact room categories are not verified from the images. Room details are sourced from Six Senses.</p>
         </div>
       </div>
       <p className="stay-accessible-only" aria-live="polite" aria-atomic="true">Accommodation {active + 1} of {rooms.length}: {room.name}.</p>
