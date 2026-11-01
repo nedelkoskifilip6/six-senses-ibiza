@@ -12,72 +12,150 @@ const updateHeader = () => { header?.classList.toggle('is-scrolled', !document.q
 window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(updateHeader); ticking = true; } }, {passive:true});
 updateHeader();
 
-// Native modal navigation keeps keyboard focus inside and restores its opener.
+// The same quiet editorial menu is available on every viewport. Native dialog
+// semantics keep focus contained; closing restores the original scroll lock.
 const menu = document.querySelector<HTMLDialogElement>('#mobile-menu');
 const menuToggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
 let menuOverflow = '';
+let menuEntrance:gsap.core.Tween | undefined;
+let menuNeedsRestore = false;
+let menuFocusDestination:HTMLElement | null = null;
+const restoreMenu = () => {
+  if (!menuNeedsRestore) return;
+  menuNeedsRestore = false;
+  menuEntrance?.kill();
+  if (menu) gsap.set(menu.querySelectorAll('nav a'),{clearProps:'transform,opacity'});
+  document.body.style.overflow = menuOverflow;
+  menuToggle?.setAttribute('aria-expanded','false');
+  const destination = menuFocusDestination;
+  menuFocusDestination = null;
+  if (destination) {
+    const focusTarget = destination.querySelector<HTMLElement>('h1,h2') || destination;
+    if (!focusTarget.hasAttribute('tabindex')) {
+      focusTarget.setAttribute('tabindex','-1');
+      focusTarget.addEventListener('blur',() => focusTarget.removeAttribute('tabindex'),{once:true});
+    }
+    focusTarget.focus({preventScroll:true});
+  } else menuToggle?.focus({preventScroll:true});
+};
 const closeMenu = () => {
   if (!menu?.open) return;
   menu.close();
-  document.body.style.overflow = menuOverflow;
-  menuToggle?.setAttribute('aria-expanded','false');
-  menuToggle?.focus({preventScroll:true});
+  // Restore the scroll container before a link can begin its fragment navigation.
+  restoreMenu();
 };
 menuToggle?.addEventListener('click', () => {
-  if (!menu) return;
+  if (!menu || menu.open) return;
   menuOverflow = document.body.style.overflow;
   menu.showModal();
+  menuNeedsRestore = true;
+  menuFocusDestination = null;
   document.body.style.overflow = 'hidden';
   menuToggle.setAttribute('aria-expanded','true');
-  if (!reducedMotion.matches) gsap.fromTo(menu.querySelectorAll('nav a'),{y:20,opacity:0},{y:0,opacity:1,duration:.6,stagger:.045,ease:'power2.out'});
+  if (!reducedMotion.matches) {
+    menuEntrance = gsap.fromTo(menu.querySelectorAll('nav a'),
+      {y:8,opacity:0},
+      {y:0,opacity:1,duration:.48,stagger:.035,ease:'power2.out',clearProps:'transform,opacity'});
+  }
 });
 menu?.querySelector('.menu-close')?.addEventListener('click',closeMenu);
-menu?.addEventListener('cancel',(event) => { event.preventDefault(); closeMenu(); });
-menu?.querySelectorAll('a').forEach(link => link.addEventListener('click',closeMenu));
-window.matchMedia('(min-width: 961px)').addEventListener('change',event => {if (event.matches) closeMenu();});
+menu?.addEventListener('cancel',event => { event.preventDefault(); closeMenu(); });
+menu?.addEventListener('close',() => { if (!menu.open) restoreMenu(); });
+menu?.querySelectorAll<HTMLAnchorElement>('a[href]').forEach(link => {
+  link.addEventListener('click',event => {
+    const url = new URL(link.href);
+    const samePage = url.origin === location.origin && url.pathname === location.pathname && url.search === location.search;
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank' || !samePage || !url.hash) {
+      closeMenu();
+      return;
+    }
+    const destination = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    if (!destination) { closeMenu(); return; }
+    event.preventDefault();
+    menuFocusDestination = destination;
+    closeMenu();
+    // Push the fragment without starting a second browser-managed smooth scroll.
+    if (location.hash !== url.hash) history.pushState(null,'',url.href);
+    // Let the dialog close event and restored scrollbar settle before scrolling.
+    // Refreshing ScrollTrigger here would restore an earlier scroll position while
+    // the browser is still carrying out its smooth scroll.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      destination.scrollIntoView({block:'start',behavior:'instant'});
+    }));
+  });
+});
 
-// The photograph becomes a magazine spread. One scrubbed timeline owns its geometry,
-// so forward and reverse scrolling travel through precisely the same composition.
+// A single reversible timeline turns the arrival photograph into an architectural
+// spread. Geometry belongs to this timeline alone, including on a viewport change.
 const media = gsap.matchMedia();
 ScrollTrigger.config({ignoreMobileResize:true});
-if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701px)', mobile:'(max-width: 700px)', reduce:'(prefers-reduced-motion: reduce)' }, context => {
+if (document.querySelector('.hero-story')) media.add({
+  desktop:'(min-width: 701px)',
+  mobile:'(max-width: 700px)',
+  reduce:'(prefers-reduced-motion: reduce)',
+}, context => {
   const {desktop,reduce} = context.conditions!;
-  const stage=document.querySelector('.hero-stage');
+  const stage=document.querySelector<HTMLElement>('.hero-stage');
   if (reduce) {
     stage?.classList.add('is-static');
     return () => stage?.classList.remove('is-static');
   }
-  const intro=gsap.timeline({defaults:{ease:'power3.out'}});
+
+  gsap.set('.hero-photo-frame',{left:0,top:0,width:'100%',height:'100%'});
+  const intro=gsap.timeline({defaults:{ease:'power2.out'}});
   if (window.scrollY < 50) {
-    intro.from('.hero-photo-frame',{opacity:.3,duration:1.35},0)
-      .from('.site-header',{opacity:0,y:-10,duration:.8},.1)
-      .from('.hero-kicker',{opacity:0,y:14,duration:.8},.15)
-      .from('.hero-line',{opacity:0,y:45,duration:1.1,stagger:.11},.25)
-      .from('.hero-bottom',{opacity:0,y:12,duration:1},.6);
+    intro.from('.hero-photo',{opacity:.65,scale:1.025,duration:1.05},0)
+      .from('.site-header',{opacity:0,y:-6,duration:.65},.08)
+      .from('.hero-kicker',{opacity:0,y:8,duration:.65},.12)
+      .from('.hero-line',{opacity:0,y:18,duration:.85,stagger:.09},.2)
+      .from('.hero-bottom',{opacity:0,y:10,duration:.75},.46);
   }
+
   const cinematic=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{
-    trigger:'.hero-story',start:'top top',end:() => `+=${window.innerHeight * (desktop?1.85:1.2)}`,
-    pin:'.hero-stage',pinSpacing:true,scrub:desktop?.65:.25,anticipatePin:1,invalidateOnRefresh:true,
+    trigger:'.hero-story',start:'top top',
+    end:() => `+=${window.innerHeight * (desktop?1.55:.95)}`,
+    pin:'.hero-stage',pinSpacing:true,scrub:desktop?.55:.2,
+    anticipatePin:1,invalidateOnRefresh:true,
   }});
-  cinematic.to('.hero-content',{autoAlpha:0,y:desktop?-60:-25,duration:.25},0)
-    .to('.hero-foot,.hero-photo-note',{autoAlpha:0,duration:.18},0)
-    .to('.hero-photo-frame',{left:'6%',top:'10%',width:'88%',height:'80%',duration:.4,ease:'power1.inOut'},.08)
-    .to('.hero-shade',{opacity:0,duration:.4},.08)
-    .to('.hero-photo-frame',{left:desktop?'47%':'6%',top:desktop?'20%':'44%',width:desktop?'47%':'88%',height:desktop?'68%':'49%',duration:.55,ease:'power2.inOut'},.42)
-    .fromTo('.transition-copy',{autoAlpha:0,y:24},{autoAlpha:1,y:0,duration:.4,ease:'power2.out'},.58)
-    .fromTo('.frame-secondary',{autoAlpha:0,clipPath:'inset(100% 0% 0% 0%)',y:20},{autoAlpha:1,clipPath:'inset(0% 0% 0% 0%)',y:0,duration:.5,ease:'power2.inOut'},.6)
-    .to({}, {duration:.14});
+  cinematic.to('.hero-content',{autoAlpha:0,y:desktop?-20:-12,duration:.28},0)
+    .to('.hero-foot,.hero-photo-note',{autoAlpha:0,duration:.2},0)
+    .to('.hero-photo-frame',{
+      left:desktop?'24%':'6%',top:desktop?'10%':'7%',
+      width:desktop?'70%':'88%',height:desktop?'78%':'76%',
+      duration:.44,ease:'power1.inOut',
+    },.06)
+    .to('.hero-shade',{opacity:0,duration:.45},.06)
+    .to('.hero-photo-frame',{
+      left:desktop?'38%':'6%',top:desktop?'12%':'8%',
+      width:desktop?'56%':'88%',height:desktop?'68%':'50%',
+      duration:.58,ease:'power1.inOut',
+    },.5)
+    .fromTo('.transition-copy',
+      {autoAlpha:0,y:12},
+      {autoAlpha:1,y:0,duration:.42,ease:'power2.out'},.63);
+  if (desktop) cinematic.fromTo('.frame-secondary',
+    {autoAlpha:0,y:10},
+    {autoAlpha:1,y:0,duration:.44,ease:'power2.out'},.7);
+  cinematic.to({}, {duration:.12});
+
   gsap.utils.toArray<HTMLElement>('.reveal').forEach(element => {
-    gsap.from(element,{y:desktop?35:20,opacity:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:element,start:'top 92%',once:true}});
+    gsap.from(element,{y:desktop?14:10,opacity:0,duration:.72,ease:'power2.out',
+      scrollTrigger:{trigger:element,start:'top 94%',once:true}});
   });
   gsap.utils.toArray<HTMLElement>('.reveal-image').forEach(element => {
-    gsap.from(element,{clipPath:'inset(6% 0% 0% 0%)',y:18,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:element,start:'top 93%',once:true}});
+    gsap.from(element,{y:12,opacity:0,duration:.85,ease:'power2.out',
+      scrollTrigger:{trigger:element,start:'top 95%',once:true}});
   });
-  gsap.fromTo('.living-frame',{clipPath:desktop?'inset(0% 9% 0% 9%)':'inset(0% 4% 0% 4%)'},{clipPath:'inset(0% 0% 0% 0%)',ease:'none',scrollTrigger:{trigger:'.living-story',start:'top 85%',end:'top 8%',scrub:.5}});
   if (desktop) {
-    gsap.fromTo('.sanctuary-visual img',{scale:1.1,yPercent:-2},{scale:1.04,yPercent:2,ease:'none',scrollTrigger:{trigger:'.sanctuary-visual',start:'top bottom',end:'bottom top',scrub:1}});
-    gsap.fromTo('.wellness-breathe svg',{rotation:-10,scale:.92},{rotation:12,scale:1.04,ease:'none',scrollTrigger:{trigger:'.wellness',start:'top bottom',end:'bottom top',scrub:1.5}});
-    gsap.fromTo('.nature-image img',{objectPosition:'40% 35%'},{objectPosition:'40% 60%',ease:'none',scrollTrigger:{trigger:'.nature-image',start:'top bottom',end:'bottom top',scrub:1.2}});
+    const architecturalImages = [
+      {image:'.sanctuary-visual img',trigger:'.sanctuary-visual'},
+      {image:'.living-frame > img',trigger:'.living-frame'},
+    ];
+    architecturalImages.forEach(({image,trigger}) => {
+      if (!document.querySelector(image)) return;
+      gsap.fromTo(image,{scale:1.035,yPercent:-1},{scale:1.035,yPercent:1,ease:'none',
+        scrollTrigger:{trigger,start:'top bottom',end:'bottom top',scrub:1.2}});
+    });
   }
   return () => intro.kill();
 });
@@ -104,6 +182,11 @@ const experiences = [
   {image:'olive',position:'40% 50%',alt:'A sunlit olive branch, illustrative of the Mediterranean landscape',category:'CULTURE & CONSCIOUS LIVING',description:'Discover island traditions through Hierbas and Flaó at Can Tanca, or explore resourceful everyday living in a Zero Waste Workshop.',url:'experiences/'},
 ];
 const experienceTabs = [...document.querySelectorAll<HTMLButtonElement>('[data-experience]')];
+const experienceTablist = document.querySelector<HTMLElement>('.experience-tabs[role="tablist"]');
+const experienceMobile = window.matchMedia('(max-width: 700px)');
+const updateExperienceOrientation = () => experienceTablist?.setAttribute('aria-orientation',experienceMobile.matches?'horizontal':'vertical');
+updateExperienceOrientation();
+experienceMobile.addEventListener('change',updateExperienceOrientation);
 let experienceIndex=0;
 const setExperience = (index:number,focus=false) => {
   experienceIndex=(index+experiences.length)%experiences.length;
