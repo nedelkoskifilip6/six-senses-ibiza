@@ -4,7 +4,7 @@ import serifFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-l
 import italicFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-italic.woff2?url';
 import sansFont from '@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2?url';
 interface Props { title?: string; description?: string; }
-const {title='Six Senses Ibiza — The Beauty of Being | Independent Concept',description='An independent design study inspired by the quiet northern coast of Ibiza. Discover suites, wellness, Mediterranean dining and a slower rhythm of life. Not affiliated with Six Senses.'}=Astro.props;
+const {title='Six Senses Ibiza — The Beauty of Being',description='An independent design study inspired by the quiet northern coast of Ibiza. Discover suites, wellness, Mediterranean dining and a slower rhythm of life. Not affiliated with Six Senses.'}=Astro.props;
 const canonical=new URL(Astro.url.pathname,Astro.site).href;
 const base = import.meta.env.BASE_URL;
 const socialImage = new URL(`${base}social/hero-preview-v1.jpg`, Astro.site).href;
