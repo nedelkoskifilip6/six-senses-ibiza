@@ -36,13 +36,13 @@ menu?.addEventListener('cancel',(event) => { event.preventDefault(); closeMenu()
 menu?.querySelectorAll('a').forEach(link => link.addEventListener('click',closeMenu));
 window.matchMedia('(min-width: 961px)').addEventListener('change',event => {if (event.matches) closeMenu();});
 
-// A quiet crossfade connects the full-screen arrival photograph to a static
-// ivory editorial scene. Only opacity changes, in either scroll direction.
+// Photographic shutters open onto an ivory editorial scene. Every plane uses
+// the same existing photograph and cover crop; the original remains the fallback.
 const media = gsap.matchMedia();
 ScrollTrigger.config({ignoreMobileResize:true});
 if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701px)', mobile:'(max-width: 700px)', reduce:'(prefers-reduced-motion: reduce)' }, context => {
   const {desktop,reduce} = context.conditions!;
-  const stage=document.querySelector('.hero-stage');
+  const stage=document.querySelector<HTMLElement>('.hero-stage');
   if (reduce) {
     stage?.classList.add('is-static');
     return () => stage?.classList.remove('is-static');
@@ -56,16 +56,79 @@ if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701p
       .from('.hero-bottom p',{opacity:0,duration:.7},.58)
       .from('.hero-explore',{opacity:0,duration:.65},.72);
   }
-  const cinematic=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{
+  const photo=stage?.querySelector<HTMLImageElement>('.hero-photo');
+  const photoFrame=stage?.querySelector<HTMLElement>('.hero-photo-frame');
+  if (!stage || !photo || !photoFrame) return () => intro.kill();
+  const originalFrameStyle=photoFrame.getAttribute('style');
+  const planeLayer=document.createElement('div');
+  planeLayer.className='hero-planes';
+  planeLayer.setAttribute('aria-hidden','true');
+  planeLayer.style.visibility='hidden';
+  planeLayer.style.opacity='0';
+  const planes=Array.from({length:desktop?5:3},()=>{
+    const plane=document.createElement('div');
+    plane.className='hero-plane';
+    planeLayer.append(plane);
+    return plane;
+  });
+  stage.append(planeLayer);
+  const photoState={cover:1,fallback:1,planeOpacity:0};
+  let active=true;
+  let planesReady=false;
+  let transitionMode:'pending'|'planes'|'fade'='pending';
+  const renderPhotoLayers=()=>{
+    if (!active) return;
+    if (photoState.cover===1 && photoState.fallback===1 && photoState.planeOpacity===0) transitionMode='pending';
+    else if (transitionMode==='pending') transitionMode=planesReady?'planes':'fade';
+    const usePlanes=transitionMode==='planes' && planesReady;
+    const frameOpacity=usePlanes?photoState.cover:photoState.fallback;
+    photoFrame.style.opacity=String(frameOpacity);
+    photoFrame.style.visibility=frameOpacity>0?'visible':'hidden';
+    planeLayer.style.opacity=String(usePlanes?photoState.planeOpacity:0);
+    planeLayer.style.visibility=usePlanes && photoState.planeOpacity>0?'visible':'hidden';
+  };
+  const updatePlanes=()=>{
+    const width=stage.clientWidth;
+    const height=stage.clientHeight;
+    const source=photo.currentSrc || photo.src;
+    planesReady=photo.complete && photo.naturalWidth>0 && photo.naturalHeight>0 && width>0 && height>0 && CSS.supports('perspective','1400px');
+    if (planesReady) {
+      const coverScale=Math.max(width/photo.naturalWidth,height/photo.naturalHeight);
+      const imageWidth=photo.naturalWidth*coverScale;
+      const imageHeight=photo.naturalHeight*coverScale;
+      const position=getComputedStyle(photo).objectPosition.split(/\s+/);
+      const offset=(value:string,space:number)=>value?.endsWith('%')?space*parseFloat(value)/100:parseFloat(value)||0;
+      const imageLeft=offset(position[0],width-imageWidth);
+      const imageTop=offset(position[1] || position[0],height-imageHeight);
+      planes.forEach((plane,index)=>{
+        const left=width/planes.length*index;
+        plane.style.left=`${left}px`;
+        plane.style.width=`${width/planes.length+1}px`;
+        plane.style.backgroundImage=`url(${JSON.stringify(source)})`;
+        plane.style.backgroundSize=`${imageWidth}px ${imageHeight}px`;
+        plane.style.backgroundPosition=`${imageLeft-left}px ${imageTop}px`;
+      });
+    }
+    renderPhotoLayers();
+  };
+  photo.addEventListener('load',updatePlanes);
+  photo.addEventListener('error',updatePlanes);
+  ScrollTrigger.addEventListener('refresh',updatePlanes);
+  updatePlanes();
+  const cinematic=gsap.timeline({defaults:{ease:'none'},onUpdate:renderPhotoLayers,scrollTrigger:{
     trigger:'.hero-story',start:'top top',end:() => `+=${window.innerHeight * (desktop?1.6:1.12)}`,
     pin:'.hero-stage',pinSpacing:true,scrub:desktop?.35:.2,anticipatePin:1,invalidateOnRefresh:true,
   }});
   cinematic.to('.hero-content',{autoAlpha:0,duration:.36},0)
     .to('.hero-foot,.hero-photo-note',{autoAlpha:0,duration:.3},0)
-    .to('.hero-photo-frame',{autoAlpha:0,duration:.76},.08)
+    .to(photoState,{planeOpacity:1,duration:.04},.02)
+    .to(photoState,{cover:0,duration:.08},.08)
+    .to(photoState,{fallback:0,duration:.76},.08)
+    .to(planes,{rotationY:desktop?-78:-65,x:desktop?-16:-8,z:desktop?-52:-30,duration:.6,stagger:.06,ease:'power1.inOut'},.14)
     .fromTo('.frame-secondary',{autoAlpha:0},{autoAlpha:1,duration:.64},.3)
     .fromTo('.transition-copy',{autoAlpha:0},{autoAlpha:1,duration:.56},.44)
-    .to({}, {duration:.1});
+    .to(photoState,{planeOpacity:0,duration:.16},.88)
+    .to({}, {duration:.08});
   gsap.utils.toArray<HTMLElement>('.reveal').forEach(element => {
     gsap.from(element,{y:desktop?35:20,opacity:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:element,start:'top 92%',once:true}});
   });
@@ -78,7 +141,17 @@ if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701p
     gsap.fromTo('.wellness-breathe svg',{rotation:-10,scale:.92},{rotation:12,scale:1.04,ease:'none',scrollTrigger:{trigger:'.wellness',start:'top bottom',end:'bottom top',scrub:1.5}});
     gsap.fromTo('.nature-image img',{objectPosition:'40% 35%'},{objectPosition:'40% 60%',ease:'none',scrollTrigger:{trigger:'.nature-image',start:'top bottom',end:'bottom top',scrub:1.2}});
   }
-  return () => intro.kill();
+  return () => {
+    active=false;
+    intro.kill();
+    cinematic.kill();
+    photo.removeEventListener('load',updatePlanes);
+    photo.removeEventListener('error',updatePlanes);
+    ScrollTrigger.removeEventListener('refresh',updatePlanes);
+    planeLayer.remove();
+    if (originalFrameStyle===null) photoFrame.removeAttribute('style');
+    else photoFrame.setAttribute('style',originalFrameStyle);
+  };
 });
 document.fonts.ready.then(() => ScrollTrigger.refresh());
 window.addEventListener('load', () => ScrollTrigger.refresh(),{once:true});
