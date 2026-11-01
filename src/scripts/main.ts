@@ -36,8 +36,8 @@ menu?.addEventListener('cancel',(event) => { event.preventDefault(); closeMenu()
 menu?.querySelectorAll('a').forEach(link => link.addEventListener('click',closeMenu));
 window.matchMedia('(min-width: 961px)').addEventListener('change',event => {if (event.matches) closeMenu();});
 
-// Photographic shutters open onto an ivory editorial scene. Every plane uses
-// the same existing photograph and cover crop; the original remains the fallback.
+// A connected photographic page turns onto an ivory editorial scene. Adjacent
+// strips share their edges, so the photograph bends as one continuous sheet.
 const media = gsap.matchMedia();
 ScrollTrigger.config({ignoreMobileResize:true});
 if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701px)', mobile:'(max-width: 700px)', reduce:'(prefers-reduced-motion: reduce)' }, context => {
@@ -60,39 +60,74 @@ if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701p
   const photoFrame=stage?.querySelector<HTMLElement>('.hero-photo-frame');
   if (!stage || !photo || !photoFrame) return () => intro.kill();
   const originalFrameStyle=photoFrame.getAttribute('style');
-  const planeLayer=document.createElement('div');
-  planeLayer.className='hero-planes';
-  planeLayer.setAttribute('aria-hidden','true');
-  planeLayer.style.visibility='hidden';
-  planeLayer.style.opacity='0';
-  const planes=Array.from({length:desktop?5:3},()=>{
-    const plane=document.createElement('div');
-    plane.className='hero-plane';
-    planeLayer.append(plane);
-    return plane;
+  const bookLayer=document.createElement('div');
+  bookLayer.className='hero-book';
+  bookLayer.setAttribute('aria-hidden','true');
+  bookLayer.style.visibility='hidden';
+  bookLayer.style.opacity='0';
+  const pageShadow=document.createElement('div');
+  pageShadow.className='hero-page-shadow';
+  bookLayer.append(pageShadow);
+  const strips=Array.from({length:desktop?16:12},()=>{
+    const strip=document.createElement('div');
+    strip.className='hero-page-strip';
+    const front=document.createElement('div');
+    front.className='hero-page-front';
+    const back=document.createElement('div');
+    back.className='hero-page-back';
+    strip.append(front,back);
+    bookLayer.append(strip);
+    return {strip,front};
   });
-  stage.append(planeLayer);
-  const photoState={cover:1,fallback:1,planeOpacity:0};
+  stage.append(bookLayer);
+  const photoState={cover:1,fallback:1,bookOpacity:0,turn:0};
   let active=true;
-  let planesReady=false;
-  let transitionMode:'pending'|'planes'|'fade'='pending';
+  let pageReady=false;
+  let pageWidth=0;
+  let transitionMode:'pending'|'book'|'fade'='pending';
   const renderPhotoLayers=()=>{
     if (!active) return;
-    if (photoState.cover===1 && photoState.fallback===1 && photoState.planeOpacity===0) transitionMode='pending';
-    else if (transitionMode==='pending') transitionMode=planesReady?'planes':'fade';
-    const usePlanes=transitionMode==='planes' && planesReady;
-    const frameOpacity=usePlanes?photoState.cover:photoState.fallback;
+    if (photoState.cover===1 && photoState.fallback===1 && photoState.bookOpacity===0 && photoState.turn===0) transitionMode='pending';
+    else if (transitionMode==='pending') transitionMode=pageReady?'book':'fade';
+    const useBook=transitionMode==='book' && pageReady;
+    const frameOpacity=useBook?photoState.cover:photoState.fallback;
     photoFrame.style.opacity=String(frameOpacity);
     photoFrame.style.visibility=frameOpacity>0?'visible':'hidden';
-    planeLayer.style.opacity=String(usePlanes?photoState.planeOpacity:0);
-    planeLayer.style.visibility=usePlanes && photoState.planeOpacity>0?'visible':'hidden';
+    bookLayer.style.opacity=String(useBook?photoState.bookOpacity:0);
+    bookLayer.style.visibility=useBook && photoState.bookOpacity>0?'visible':'hidden';
+    if (!pageReady) return;
+    const progress=photoState.turn;
+    const stripWidth=pageWidth/strips.length;
+    const perspective=Math.max(1600,window.innerWidth*2.4);
+    const recession=pageWidth*.32*Math.sin(Math.PI*progress);
+    let x=0;
+    let z=0;
+    let projectedOuterEdge=0;
+    strips.forEach(({strip},index)=>{
+      const normalizedIndex=(index+.5)/strips.length;
+      const curlWidth=.48;
+      const foldStart=1-progress*(1+curlWidth);
+      const local=Math.max(0,Math.min(1,(normalizedIndex-foldStart)/curlWidth));
+      const angle=-180*local*local*(3-2*local);
+      const radians=angle*Math.PI/180;
+      strip.style.transform=`translate3d(${x}px,0,${z-recession}px) rotateY(${angle}deg)`;
+      strip.style.setProperty('--page-shade',String(Math.abs(Math.sin(radians))*.16));
+      x+=stripWidth*Math.cos(radians);
+      z-=stripWidth*Math.sin(radians);
+      projectedOuterEdge=Math.max(projectedOuterEdge,x*perspective/(perspective-z+recession));
+    });
+    const shadowWidth=desktop?110:72;
+    pageShadow.style.width=`${shadowWidth}px`;
+    pageShadow.style.transform=`translate3d(${Math.max(0,projectedOuterEdge-shadowWidth*.5)}px,0,0)`;
+    pageShadow.style.opacity=String(Math.sin(Math.PI*progress)*.2);
   };
-  const updatePlanes=()=>{
+  const updatePage=()=>{
     const width=stage.clientWidth;
     const height=stage.clientHeight;
     const source=photo.currentSrc || photo.src;
-    planesReady=photo.complete && photo.naturalWidth>0 && photo.naturalHeight>0 && width>0 && height>0 && CSS.supports('perspective','1400px');
-    if (planesReady) {
+    pageReady=photo.complete && photo.naturalWidth>0 && photo.naturalHeight>0 && width>0 && height>0 && CSS.supports('perspective','1600px');
+    if (pageReady) {
+      pageWidth=width;
       const coverScale=Math.max(width/photo.naturalWidth,height/photo.naturalHeight);
       const imageWidth=photo.naturalWidth*coverScale;
       const imageHeight=photo.naturalHeight*coverScale;
@@ -100,34 +135,33 @@ if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701p
       const offset=(value:string,space:number)=>value?.endsWith('%')?space*parseFloat(value)/100:parseFloat(value)||0;
       const imageLeft=offset(position[0],width-imageWidth);
       const imageTop=offset(position[1] || position[0],height-imageHeight);
-      planes.forEach((plane,index)=>{
-        const left=width/planes.length*index;
-        plane.style.left=`${left}px`;
-        plane.style.width=`${width/planes.length+1}px`;
-        plane.style.backgroundImage=`url(${JSON.stringify(source)})`;
-        plane.style.backgroundSize=`${imageWidth}px ${imageHeight}px`;
-        plane.style.backgroundPosition=`${imageLeft-left}px ${imageTop}px`;
+      strips.forEach(({strip,front},index)=>{
+        const left=width/strips.length*index;
+        strip.style.width=`${width/strips.length+.7}px`;
+        front.style.backgroundImage=`url(${JSON.stringify(source)})`;
+        front.style.backgroundSize=`${imageWidth}px ${imageHeight}px`;
+        front.style.backgroundPosition=`${imageLeft-left}px ${imageTop}px`;
       });
     }
     renderPhotoLayers();
   };
-  photo.addEventListener('load',updatePlanes);
-  photo.addEventListener('error',updatePlanes);
-  ScrollTrigger.addEventListener('refresh',updatePlanes);
-  updatePlanes();
+  photo.addEventListener('load',updatePage);
+  photo.addEventListener('error',updatePage);
+  ScrollTrigger.addEventListener('refresh',updatePage);
+  updatePage();
   const cinematic=gsap.timeline({defaults:{ease:'none'},onUpdate:renderPhotoLayers,scrollTrigger:{
     trigger:'.hero-story',start:'top top',end:() => `+=${window.innerHeight * (desktop?1.6:1.12)}`,
     pin:'.hero-stage',pinSpacing:true,scrub:desktop?.35:.2,anticipatePin:1,invalidateOnRefresh:true,
   }});
   cinematic.to('.hero-content',{autoAlpha:0,duration:.36},0)
     .to('.hero-foot,.hero-photo-note',{autoAlpha:0,duration:.3},0)
-    .to(photoState,{planeOpacity:1,duration:.04},.02)
+    .to(photoState,{bookOpacity:1,duration:.04},.02)
     .to(photoState,{cover:0,duration:.08},.08)
     .to(photoState,{fallback:0,duration:.76},.08)
-    .to(planes,{rotationY:desktop?-78:-65,x:desktop?-16:-8,z:desktop?-52:-30,duration:.6,stagger:.06,ease:'power1.inOut'},.14)
+    .to(photoState,{turn:1,duration:.86,ease:'power1.inOut'},.12)
     .fromTo('.frame-secondary',{autoAlpha:0},{autoAlpha:1,duration:.64},.3)
     .fromTo('.transition-copy',{autoAlpha:0},{autoAlpha:1,duration:.56},.44)
-    .to(photoState,{planeOpacity:0,duration:.16},.88)
+    .to(photoState,{bookOpacity:0,duration:.16},.94)
     .to({}, {duration:.08});
   gsap.utils.toArray<HTMLElement>('.reveal').forEach(element => {
     gsap.from(element,{y:desktop?35:20,opacity:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:element,start:'top 92%',once:true}});
@@ -145,10 +179,10 @@ if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701p
     active=false;
     intro.kill();
     cinematic.kill();
-    photo.removeEventListener('load',updatePlanes);
-    photo.removeEventListener('error',updatePlanes);
-    ScrollTrigger.removeEventListener('refresh',updatePlanes);
-    planeLayer.remove();
+    photo.removeEventListener('load',updatePage);
+    photo.removeEventListener('error',updatePage);
+    ScrollTrigger.removeEventListener('refresh',updatePage);
+    bookLayer.remove();
     if (originalFrameStyle===null) photoFrame.removeAttribute('style');
     else photoFrame.setAttribute('style',originalFrameStyle);
   };
