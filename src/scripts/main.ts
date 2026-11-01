@@ -57,7 +57,7 @@ if (document.querySelector('.hero-story')) media.add({ desktop:'(min-width: 701p
       .from('.hero-explore',{opacity:0,duration:.65},.72);
   }
   const cinematic=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{
-    trigger:'.hero-story',start:'top top',end:() => `+=${window.innerHeight * (desktop?1:.7)}`,
+    trigger:'.hero-story',start:'top top',end:() => `+=${window.innerHeight * (desktop?1.6:1.12)}`,
     pin:'.hero-stage',pinSpacing:true,scrub:desktop?.35:.2,anticipatePin:1,invalidateOnRefresh:true,
   }});
   cinematic.to('.hero-content',{autoAlpha:0,duration:.36},0)
